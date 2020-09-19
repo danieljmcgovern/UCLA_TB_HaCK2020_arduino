@@ -165,8 +165,20 @@ void us_measure()
 
 void loop()
 {
-  us_measure();
-  delay(3000);
+
+  if(Serial.available() > 0) 
+  {
+    float val = us_front.ping_cm();
+    char cmd = Serial.read(); 
+    if (cmd == 's')
+    {
+      Serial.println(val);
+      delay(100);
+    }
+  }
+
+  //us_measure();
+  //delay(3000);
   // delay(2000);
   // goForward(2000);
   // brake(100);
