@@ -36,7 +36,7 @@ void setup()
   pinMode(RL_IN3, OUTPUT);
   pinMode(RL_IN4, OUTPUT);
 }
-void goForward(int speed)
+void goForward(int time)
 {
   // turn on front motors
   digitalWrite(FR_IN1, HIGH);
@@ -49,12 +49,14 @@ void goForward(int speed)
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, HIGH);
   // set speed
+  int speed = 255;
   analogWrite(FR_ENA, speed);
   analogWrite(FL_ENB, speed);
   analogWrite(RR_ENA, speed);
   analogWrite(RL_ENB, speed);
+  delay(time);
 }
-void goBackwards(int speed)
+void goBackwards(int time)
 {
   // turn on front motors
   digitalWrite(FR_IN1, LOW);
@@ -67,10 +69,13 @@ void goBackwards(int speed)
   digitalWrite(RL_IN3, HIGH);
   digitalWrite(RL_IN4, LOW);
   // set speed
+  int speed = 255;
   analogWrite(FR_ENA, speed);
   analogWrite(FL_ENB, speed);
   analogWrite(RR_ENA, speed);
   analogWrite(RL_ENB, speed);
+
+  delay(time);
 }
 void turnRight(int speed, int turningTime)
 {
@@ -113,7 +118,7 @@ void turnLeft(int speed, int turningTime)
   delay(turningTime);
 }
 
-void brake()
+void brake(int time)
 {
   digitalWrite(FR_IN1, LOW);
   digitalWrite(FR_IN2, LOW);
@@ -124,14 +129,23 @@ void brake()
   digitalWrite(RR_IN2, LOW);
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, LOW);
+  
+  delay(time);
 }
 void loop()
 {
+  delay(2000);
+  goForward(2000);
+  brake(100);
+  goBackwards(2000);
+  brake(100);
+  delay(5000);
+
   turnRight(255, 2400);
-  brake();
-  delay(5000);
+  brake(100);
+  
   turnLeft(255, 2400);
-  brake();
-  delay(5000);
+  brake(100);
+
   //test commit
 }
