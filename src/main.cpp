@@ -1,4 +1,20 @@
 #include <Arduino.h>
+#include <NewPing.h>
+
+#define US_FRONT_PING 40
+#define US_FRONT_ECHO 41
+#define US_REAR_PING 42
+#define US_REAR_ECHO 43
+#define US_LEFT_PING 44
+#define US_LEFT_ECHO 45
+#define US_RIGHT_PING 46
+#define US_RIGHT_ECHO 47
+#define MAX_DIST 500
+
+NewPing us_front(US_FRONT_PING, US_FRONT_ECHO, MAX_DIST);
+NewPing us_rear(US_REAR_PING, US_REAR_ECHO, MAX_DIST);
+NewPing us_left(US_LEFT_PING, US_LEFT_ECHO, MAX_DIST);
+NewPing us_right(US_RIGHT_PING, US_RIGHT_ECHO, MAX_DIST);
 
 //Motor Connections
 #define FR_ENA 4
@@ -19,6 +35,7 @@
 
 void setup()
 {
+  Serial.begin(9600);
   // All motor control pins are outputs
   pinMode(FR_ENA, OUTPUT);
   pinMode(FR_IN1, OUTPUT);
@@ -129,23 +146,39 @@ void brake(int time)
   digitalWrite(RR_IN2, LOW);
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, LOW);
-  
+
   delay(time);
 }
+void us_measure()
+{
+  Serial.print("us_front: ");
+  Serial.println(us_front.ping_cm());
+  Serial.print("us_rear: ");
+  Serial.println(us_rear.ping_cm());
+  Serial.print("us_left: ");
+  Serial.println(us_left.ping_cm());
+  Serial.print("us_right: ");
+  Serial.println(us_right.ping_cm());
+  Serial.println(" ");
+  Serial.println(" ");
+}
+
 void loop()
 {
-  delay(2000);
-  goForward(2000);
-  brake(100);
-  goBackwards(2000);
-  brake(100);
-  delay(5000);
+  us_measure();
+  delay(3000);
+  // delay(2000);
+  // goForward(2000);
+  // brake(100);
+  // goBackwards(2000);
+  // brake(100);
+  // delay(5000);
 
-  turnRight(255, 2400);
-  brake(100);
-  
-  turnLeft(255, 2400);
-  brake(100);
+  // turnRight(255, 2400);
+  // brake(100);
+
+  // turnLeft(255, 2400);
+  // brake(100);
 
   //test commit
 }
