@@ -151,28 +151,24 @@ void brake(int time)
 }
 void us_measure()
 {
-  Serial.print("us_front: ");
-  Serial.println(us_front.ping_cm());
-  Serial.print("us_rear: ");
-  Serial.println(us_rear.ping_cm());
-  Serial.print("us_left: ");
-  Serial.println(us_left.ping_cm());
-  Serial.print("us_right: ");
-  Serial.println(us_right.ping_cm());
-  Serial.println(" ");
-  Serial.println(" ");
+  Serial.print(us_front.ping_cm());
+  Serial.print(",");
+  Serial.print(us_rear.ping_cm());
+  Serial.print(",");
+  Serial.print(us_left.ping_cm());
+  Serial.print(",");
+  Serial.print(us_right.ping_cm());
 }
 
 void loop()
 {
 
   if(Serial.available() > 0) 
-  {
-    float val = us_front.ping_cm();
+  {    
     char cmd = Serial.read(); 
     if (cmd == 's')
     {
-      Serial.println(val);
+      us_measure();
       delay(100);
     }
   }
