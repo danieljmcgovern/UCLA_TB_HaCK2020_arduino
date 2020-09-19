@@ -151,13 +151,13 @@ void brake(int time)
 }
 void us_measure()
 {
-  Serial.print(us_front.ping_cm());
+  Serial.print(us_front.ping_median()*343.0*pow(10,-4)*0.5);
   Serial.print(",");
-  Serial.print(us_rear.ping_cm());
+  Serial.print(us_rear.ping_median()*343.0*pow(10,-4)*0.5);
   Serial.print(",");
-  Serial.print(us_left.ping_cm());
+  Serial.print(us_left.ping_median()*343.0*pow(10,-4)*0.5);
   Serial.print(",");
-  Serial.print(us_right.ping_cm());
+  Serial.print(us_right.ping_median()*343.0*pow(10,-4)*0.5);
 }
 
 void loop()
