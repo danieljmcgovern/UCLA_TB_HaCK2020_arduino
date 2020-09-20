@@ -153,10 +153,6 @@ void us_measure()
 {
   Serial.print(us_front.ping_median(3) * k);
   Serial.print(",");
-  //Serial.print(us_rear.ping_median(3) * k);
-  ////Serial.print(",");
-  //// Serial.print(us_left.ping_median(3) * k);
-  //Serial.print(",");
   Serial.print(us_right.ping_median(3) * k);
  
 }
@@ -188,10 +184,17 @@ void loop()
       brake();
       count++;
     }
-    if (count >= 38)
+    if (count == 5)
     {
       brake();
-      delay(5000);
+      delay(100);
+      turnRight(255, 2300);
+      Serial.print("flag"); //notify front end of change in car's orientation
+      delay(100);
     }
+    // if(count >= 70){
+    //   brake();
+    //   delay(5000);      
+    // }
   }
 }
