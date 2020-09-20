@@ -53,7 +53,7 @@ void setup()
   pinMode(RL_IN3, OUTPUT);
   pinMode(RL_IN4, OUTPUT);
 }
-void goForward(int time)
+void goForward(int speed)
 {
   // turn on front motors
   digitalWrite(FR_IN1, HIGH);
@@ -65,13 +65,12 @@ void goForward(int time)
   digitalWrite(RR_IN2, LOW);
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, HIGH);
-  // set speed
-  int speed = 255;
+  // set speed  
   analogWrite(FR_ENA, speed);
   analogWrite(FL_ENB, speed);
   analogWrite(RR_ENA, speed);
   analogWrite(RL_ENB, speed);
-  delay(time);
+  //delay(time);
 }
 void goBackwards(int time)
 {
@@ -135,7 +134,7 @@ void turnLeft(int speed, int turningTime)
   delay(turningTime);
 }
 
-void brake(int time)
+void brake()
 {
   digitalWrite(FR_IN1, LOW);
   digitalWrite(FR_IN2, LOW);
@@ -147,29 +146,49 @@ void brake(int time)
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, LOW);
 
-  delay(time);
+ // delay(time);
 }
+float k = 343.0 * pow(10, -4) * 0.5;  //constant to convert milliseconds to cm
 void us_measure()
 {
-  Serial.print(us_front.ping_median()*343.0*pow(10,-4)*0.5);
+  Serial.print(us_front.ping_median(3) * k);
   Serial.print(",");
-  Serial.print(us_rear.ping_median()*343.0*pow(10,-4)*0.5);
+  Serial.print(us_rear.ping_median(3) * k);
   Serial.print(",");
-  Serial.print(us_left.ping_median()*343.0*pow(10,-4)*0.5);
+  Serial.print(us_left.ping_median(3) * k);
   Serial.print(",");
-  Serial.print(us_right.ping_median()*343.0*pow(10,-4)*0.5);
+  Serial.print(us_right.ping_median(3) * k);
+}
+void measurement_run()
+{
+  goForward(165);
+  int count = 0;  
+  while (count < 9)
+  {
+    us_measure();
+    delay(1000);
+    count++;    
+  }
+  brake();
 }
 
 void loop()
 {
 
-  if(Serial.available() > 0) 
-  {    
-    char cmd = Serial.read(); 
+  if (Serial.available() > 0)
+  {
+    char cmd = Serial.read();
     if (cmd == 's')
     {
-      us_measure();
-      delay(100);
+      measurement_run();
+      // while (1)
+      // {
+      //   measurement_run();
+      //   delay(100);
+      //   // cmd = Serial.read();
+      //   // if (cmd == 'q')
+      //   //   return;
+      // }
     }
   }
 
