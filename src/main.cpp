@@ -65,7 +65,7 @@ void goForward(int speed)
   digitalWrite(RR_IN2, LOW);
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, HIGH);
-  // set speed  
+  // set speed
   analogWrite(FR_ENA, speed);
   analogWrite(FL_ENB, speed);
   analogWrite(RR_ENA, speed);
@@ -146,66 +146,52 @@ void brake()
   digitalWrite(RL_IN3, LOW);
   digitalWrite(RL_IN4, LOW);
 
- // delay(time);
+  // delay(time);
 }
-float k = 343.0 * pow(10, -4) * 0.5;  //constant to convert milliseconds to cm
+float k = 343.0 * pow(10, -4) * 0.5; //constant to convert milliseconds to cm
 void us_measure()
 {
   Serial.print(us_front.ping_median(3) * k);
   Serial.print(",");
-  Serial.print(us_rear.ping_median(3) * k);
-  Serial.print(",");
-  Serial.print(us_left.ping_median(3) * k);
-  Serial.print(",");
+  //Serial.print(us_rear.ping_median(3) * k);
+  ////Serial.print(",");
+  //// Serial.print(us_left.ping_median(3) * k);
+  //Serial.print(",");
   Serial.print(us_right.ping_median(3) * k);
+ 
 }
 void measurement_run()
 {
   goForward(165);
-  int count = 0;  
+  int count = 0;
   while (count < 9)
   {
     us_measure();
     delay(1000);
-    count++;    
+    count++;
   }
   brake();
 }
-
+int count = 0;
 void loop()
 {
-
+  
   if (Serial.available() > 0)
   {
     char cmd = Serial.read();
     if (cmd == 's')
     {
-      measurement_run();
-      // while (1)
-      // {
-      //   measurement_run();
-      //   delay(100);
-      //   // cmd = Serial.read();
-      //   // if (cmd == 'q')
-      //   //   return;
-      // }
+      //measurement_run();
+      goForward(255);
+      us_measure();
+      delay(50);
+      brake();
+      count++;
+    }
+    if (count >= 38)
+    {
+      brake();
+      delay(5000);
     }
   }
-
-  //us_measure();
-  //delay(3000);
-  // delay(2000);
-  // goForward(2000);
-  // brake(100);
-  // goBackwards(2000);
-  // brake(100);
-  // delay(5000);
-
-  // turnRight(255, 2400);
-  // brake(100);
-
-  // turnLeft(255, 2400);
-  // brake(100);
-
-  //test commit
 }
